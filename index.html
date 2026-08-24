@@ -3,222 +3,535 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>G-HP Master V5.1 | Ecosystem</title>
+    <title>G-HP Master Ecosystem | Centro de Comando 2026</title>
     
+    <!-- INFRAESTRUTURA DE ICONES E FONTES -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     
+    <!-- FIREBASE CORE SDK (COMPAT MODE) -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
     <style>
+        /* --- ARQUITETURA DE CORES G-HP (CSS VARIABLES) --- */
         :root {
-            --primary: #0ea5e9; --accent: #f59e0b; --bg: #020617; --card-bg: rgba(15, 23, 42, 0.95);
-            --border: rgba(255, 255, 255, 0.1); --text: #f8fafc; --text-dim: #94a3b8;
-            --header-h: 110px; --footer-h: 75px; --danger: #ef4444;
-            --cat-print: #10b981; --cat-docs: #3b82f6; --cat-design: #8b5cf6; --cat-retail: #f97316; --cat-util: #ef4444;
+            --primary: #0ea5e9;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #020617;
+            --card-bg: rgba(15, 23, 42, 0.95);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --header-h: 120px;
+            --footer-h: 75px;
+            
+            /* SINALIZAÇÃO POR CATEGORIA */
+            --cat-print: #10b981;
+            --cat-docs: #3b82f6;
+            --cat-design: #8b5cf6;
+            --cat-retail: #f97316;
+            --cat-util: #ef4444;
         }
 
         [data-theme="light"] {
-            --bg: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.98); --border: rgba(0, 0, 0, 0.1); --text: #0f172a; --text-dim: #64748b;
+            --bg: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.98);
+            --border: rgba(0, 0, 0, 0.1);
+            --text: #0f172a;
+            --text-dim: #64748b;
         }
 
+        /* --- RESET E COMPORTAMENTO IRONCLAD (ESTABILIDADE J5) --- */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { width: 100%; height: 100%; overflow: hidden; position: fixed; background-color: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); }
-
-        /* HEADER */
-        header {
-            height: var(--header-h); width: 100%; position: absolute; top: 0;
-            background: var(--card-bg); border-bottom: 1px solid var(--border);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 100; backdrop-filter: blur(10px);
-        }
-        .brand h1 { font-size: 1.1rem; font-weight: 800; text-transform: uppercase; }
-        .brand b { color: var(--accent); }
-        .apex-counter-hub { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-align: center; color: var(--accent); background: rgba(0,0,0,0.4); padding: 5px 15px; border-radius: 50px; border: 1px solid var(--border); margin-top: 5px; }
-
-        /* MAIN AREA */
-        main { position: absolute; top: var(--header-h); bottom: var(--footer-h); width: 100%; overflow-y: auto; padding: 15px; }
-        .tab-content { display: none; width: 100%; max-width: 600px; margin: 0 auto; padding-bottom: 30px; }
-        .tab-content.active { display: block; }
-
-        /* GRID & CARDS */
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-        .app-card {
-            background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
-            padding: 20px 10px; text-align: center; text-decoration: none; color: inherit;
-            position: relative; display: flex; flex-direction: column; align-items: center;
-        }
-        .app-card::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; border-radius: 18px 0 0 18px; }
-        .app-card i { font-size: 1.8rem; color: var(--accent); margin-bottom: 8px; }
-        .app-card h4 { font-size: 0.8rem; font-weight: 700; }
         
-        .c-print::before { background: var(--cat-print); } .c-docs::before { background: var(--cat-docs); } 
-        .c-design::before { background: var(--cat-design); } .c-retail::before { background: var(--cat-retail); } 
+        html, body { 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            position: fixed; 
+            background-color: var(--bg); 
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            transition: background 0.3s ease;
+        }
+
+        /* --- CAMADA 1: HEADER (ALTURA FIXA) --- */
+        header {
+            height: var(--header-h);
+            width: 100%;
+            position: absolute;
+            top: 0;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .brand { display: flex; align-items: center; gap: 8px; }
+        .brand h1 { 
+            font-size: 1.2rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: -1px;
+            color: var(--text);
+        }
+        .brand b { color: var(--accent); }
+
+        /* MOTOR APEX COUNTER (VISUAL) */
+        .apex-counter-hub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            text-align: center;
+            color: var(--accent);
+            background: rgba(0,0,0,0.4);
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            margin-top: 8px;
+            line-height: 1.2;
+        }
+        .apex-counter-hub b { color: #fff; }
+
+        /* --- CAMADA 2: CONTEÚDO PRINCIPAL (SCROLL INTERNO) --- */
+        main {
+            position: absolute;
+            top: var(--header-h);
+            bottom: var(--footer-h);
+            width: 100%;
+            overflow-y: auto;
+            padding: 15px;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tab-content { 
+            display: none; 
+            width: 100%; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding-bottom: 40px;
+        }
+        .tab-content.active { 
+            display: block; 
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* --- COMPONENTES: MURAL E LETREIRO --- */
+        .news-marquee { 
+            background: var(--primary); 
+            color: #fff; 
+            padding: 10px; 
+            font-size: 0.75rem; 
+            font-weight: 800; 
+            overflow: hidden; 
+            white-space: nowrap; 
+            margin-bottom: 20px; 
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+        .news-marquee div { 
+            display: inline-block; 
+            padding-left: 100%; 
+            animation: marquee 25s linear infinite; 
+        }
+        @keyframes marquee { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-150%); } 
+        }
+
+        .news-card { 
+            background: var(--card-bg); 
+            padding: 18px; 
+            border-radius: 15px; 
+            border-left: 5px solid var(--accent); 
+            margin-bottom: 15px; 
+            border-top: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .news-card h3 { font-size: 0.9rem; color: var(--accent); margin-bottom: 6px; text-transform: uppercase; }
+        .news-card p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
+
+        /* --- COMPONENTES: GRID DE APPS --- */
+        .app-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+            gap: 15px; 
+            margin-top: 10px;
+        }
+        .app-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px 15px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+        .app-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; width: 5px; height: 100%;
+            background: var(--primary);
+        }
+        .app-card i { font-size: 2.2rem; color: var(--accent); margin-bottom: 12px; }
+        .app-card h4 { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+        .app-card span { 
+            font-size: 0.65rem; 
+            color: var(--text-dim); 
+            text-transform: uppercase; 
+            margin-top: 6px;
+            background: rgba(255,255,255,0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* CLASSES DE CATEGORIA DINÂMICA */
+        .c-print::before { background: var(--cat-print); }
+        .c-docs::before { background: var(--cat-docs); }
+        .c-design::before { background: var(--cat-design); }
+        .c-retail::before { background: var(--cat-retail); }
         .c-util::before { background: var(--cat-util); }
 
-        /* ADMIN UI */
-        .admin-box { background: var(--card-bg); padding: 18px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 15px; }
-        .admin-box h3 { font-size: 0.9rem; margin-bottom: 12px; color: var(--accent); display: flex; justify-content: space-between; }
-        .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 0.8rem; }
-        
-        .btn { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; }
-        .btn-accent { background: var(--accent); color: #000; }
-        .btn-danger { background: var(--danger); color: #fff; font-size: 0.7rem; padding: 5px; }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
-
-        /* LISTA DE GERENCIAMENTO */
-        .manage-item { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border); font-size: 0.75rem; }
-
-        /* FOOTER NAV */
-        nav.bottom-nav {
-            height: var(--footer-h); width: 100%; position: absolute; bottom: 0;
-            background: var(--card-bg); border-top: 1px solid var(--border);
-            display: flex; justify-content: space-around; align-items: center;
+        /* --- CAMADA 3: PAINEL ADMINISTRATIVO (CMS) --- */
+        .admin-box { 
+            background: var(--card-bg); 
+            padding: 20px; 
+            border-radius: 20px; 
+            border: 1px solid var(--border); 
+            margin-bottom: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        .nav-item { background: none; border: none; color: var(--text-dim); display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 0.6rem; cursor: pointer; }
+        .admin-box h3 { font-size: 1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { 
+            display: block; font-size: 0.65rem; font-weight: 800; 
+            color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; 
+        }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; padding: 14px; background: var(--bg); 
+            border: 1px solid var(--border); border-radius: 12px; 
+            color: #fff; outline: none; font-size: 0.9rem; font-family: 'Inter', sans-serif;
+        }
+
+        .btn { 
+            width: 100%; padding: 15px; border-radius: 12px; border: none; 
+            font-weight: 800; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; gap: 10px; 
+            transition: 0.2s; font-family: 'Inter', sans-serif;
+            text-transform: uppercase; font-size: 0.8rem;
+        }
+        .btn-accent { background: var(--accent); color: #000; }
+        .btn-accent:active { transform: scale(0.98); opacity: 0.9; }
+        .btn-danger { background: var(--danger); color: #fff; margin-top: 10px; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dim); margin-top: 10px; }
+
+        /* LISTA DE GERENCIAMENTO (CRUD) */
+        .manage-list { margin-top: 15px; border-top: 1px solid var(--border); }
+        .manage-item { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 12px 0; border-bottom: 1px solid var(--border);
+        }
+        .manage-info h5 { font-size: 0.85rem; color: var(--text); }
+        .manage-info p { font-size: 0.65rem; color: var(--text-dim); }
+        .btn-del { 
+            background: rgba(239, 68, 68, 0.1); color: var(--danger); 
+            border: 1px solid var(--danger); padding: 5px 10px; 
+            border-radius: 6px; font-size: 0.6rem; font-weight: 800;
+        }
+
+        /* --- CAMADA 4: FOOTER (ALTURA FIXA) --- */
+        nav.bottom-nav {
+            height: var(--footer-h);
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 1000;
+        }
+        .nav-item { 
+            background: none; border: none; color: var(--text-dim); 
+            display: flex; flex-direction: column; align-items: center; 
+            gap: 5px; font-size: 0.65rem; font-weight: 700; cursor: pointer; 
+            transition: 0.2s;
+        }
         .nav-item.active { color: var(--accent); }
+        .nav-item i { font-size: 1.4rem; }
+
+        /* DEV CARD E CRÉDITOS */
+        .dev-card { 
+            background: #0f1d13; border: 1px solid #064e3b; 
+            border-radius: 18px; padding: 15px; margin: 20px 0; 
+            display: flex; align-items: center; gap: 15px; 
+        }
+        .dev-card i { color: #25d366; font-size: 1.5rem; }
+        .pix-tag { font-size: 0.55rem; background: #064e3b; color: #34d399; padding: 2px 6px; border-radius: 4px; }
+
+        /* RESPONSIVIDADE ADICIONAL */
+        @media (max-width: 360px) {
+            .app-grid { grid-template-columns: 1fr 1fr; }
+            .brand h1 { font-size: 0.9rem; }
+        }
     </style>
 </head>
 <body data-theme="dark">
 
+    <!-- HEADER IRONCLAD -->
     <header>
-        <div class="brand"><h1>G-HP Master <b>V5</b></h1></div>
-        <div class="apex-counter-hub">SISTEMAS: <b id="gCount">...</b> | ACESSOS: <b id="lCount">0</b></div>
+        <div class="brand">
+            <i class="fas fa-shield-virus" style="color:var(--accent)"></i>
+            <h1>G-HP Master <b>Ecossistema</b></h1>
+        </div>
+        <div class="apex-counter-hub">
+            🌐 SISTEMAS ATIVOS: <b id="gCount">0</b><br>
+            👤 MEUS ACESSOS: <b id="lCount">0</b>
+        </div>
+        <button onclick="toggleTheme()" style="position:absolute; right:20px; top:35px; background:none; border:none; color:var(--accent); font-size:1.3rem;">
+            <i class="fas fa-circle-half-stroke"></i>
+        </button>
     </header>
 
-    <main>
-        <!-- ABA: VITRINE -->
+    <!-- CONTEÚDO DINÂMICO -->
+    <main id="mainScroll">
+        
+        <!-- ABA 1: HUB DO ECOSSISTEMA -->
         <section id="tab-hub" class="tab-content active">
-            <div id="newsFeed"></div>
+            <div class="news-marquee">
+                <div id="marqueeText">🚀 INICIALIZANDO PROTOCOLOS G-HP MASTER... AGUARDE A SINCRONIZAÇÃO DO CENTRO DE COMANDO...</div>
+            </div>
+
+            <div id="newsFeed">
+                <!-- Notícias do Firebase entram aqui -->
+            </div>
+
             <div class="app-grid" id="appGrid">
-                <!-- Apps injetados via JS -->
+                <!-- Apps do Firebase entram aqui -->
             </div>
         </section>
 
-        <!-- ABA: ADMIN -->
+        <!-- ABA 2: PAINEL ADMIN -->
         <section id="tab-admin" class="tab-content">
+            
+            <!-- BLOCO DE LOGIN -->
             <div id="adminAuth">
                 <div class="admin-box">
-                    <h3>Acesso Administrativo</h3>
+                    <h3><i class="fas fa-lock"></i> Autenticação SGBD</h3>
+                    <p style="font-size:0.7rem; color:var(--text-dim); margin-bottom:15px;">Insira a senha de criptografia para liberar o banco de dados.</p>
                     <div class="form-group">
-                        <input type="password" id="mPass" placeholder="Senha Master...">
+                        <input type="password" id="mPass" placeholder="Senha do Administrador">
                     </div>
-                    <button class="btn btn-accent" onclick="authAdmin()">ENTRAR NO PAINEL</button>
+                    <button class="btn btn-accent" onclick="authAdmin()">Acessar Terminal</button>
                 </div>
             </div>
 
+            <!-- BLOCO DE COMANDO (LOGADO) -->
             <div id="adminPanel" style="display:none;">
                 <div class="admin-box">
-                    <h3>Novo Aplicativo</h3>
-                    <div class="form-group"><input type="text" id="addName" placeholder="Nome do App"></div>
-                    <div class="form-group"><input type="url" id="addUrl" placeholder="URL do GitHub Pages"></div>
+                    <h3><i class="fas fa-plus-circle"></i> Conectar Aplicativo</h3>
                     <div class="form-group">
+                        <label>Nome do Serviço</label>
+                        <input type="text" id="addName" placeholder="Ex: Portal do Cliente">
+                    </div>
+                    <div class="form-group">
+                        <label>URL GitHub Pages (Completa)</label>
+                        <input type="url" id="addUrl" placeholder="https://gh-photos.github.io/app/">
+                    </div>
+                    <div class="form-group">
+                        <label>Sinalização (Cor)</label>
                         <select id="addCat">
-                            <option value="c-docs">Documentos</option>
-                            <option value="c-print">Impressão</option>
-                            <option value="c-design">Design</option>
-                            <option value="c-retail">Vendas</option>
-                            <option value="c-util">Úteis</option>
+                            <option value="c-docs">🔵 Documentos</option>
+                            <option value="c-print">🟢 Impressão</option>
+                            <option value="c-design">🟣 Design</option>
+                            <option value="c-retail">🟠 Vendas</option>
+                            <option value="c-util">🔴 Úteis</option>
                         </select>
                     </div>
-                    <button class="btn btn-accent" onclick="db_addApp()"><i class="fas fa-plus"></i> PUBLICAR AGORA</button>
+                    <div class="form-group">
+                        <label>Ícone FontAwesome</label>
+                        <input type="text" id="addIcon" value="fa-rocket">
+                    </div>
+                    <button class="btn btn-accent" onclick="db_addApp()">Publicar no Ecossistema</button>
                 </div>
 
                 <div class="admin-box">
-                    <h3>Gerenciar Ecossistema</h3>
-                    <div id="manageList">
-                        <!-- Lista de apps com botão excluir -->
+                    <h3><i class="fas fa-edit"></i> Mural & Marquee</h3>
+                    <div class="form-group">
+                        <label>Texto do Letreiro (Marquee)</label>
+                        <input type="text" id="setMarquee" placeholder="Texto que corre no topo">
+                    </div>
+                    <div class="form-group">
+                        <label>Conteúdo da Notícia</label>
+                        <textarea id="newsText" rows="3" placeholder="Escreva o aviso importante aqui..."></textarea>
+                    </div>
+                    <button class="btn btn-accent" onclick="db_updateInfo()">Atualizar Feed</button>
+                </div>
+
+                <div class="admin-box">
+                    <h3><i class="fas fa-list-check"></i> Gerenciar Conexões</h3>
+                    <div id="manageList" class="manage-list">
+                        <!-- Lista de apps para deletar -->
                     </div>
                 </div>
 
-                <div class="admin-box">
-                    <h3>Mural de Avisos</h3>
-                    <div class="form-group"><textarea id="newsText" placeholder="Texto da notícia..." rows="2"></textarea></div>
-                    <button class="btn btn-outline" onclick="db_updateInfo()">ATUALIZAR MURAL</button>
+                <div class="admin-box" style="border-color: var(--danger);">
+                    <h3><i class="fas fa-database"></i> Manutenção</h3>
+                    <button class="btn btn-outline" onclick="exportData()">Exportar Backup JSON</button>
+                    <button class="btn btn-danger" onclick="logoutAdmin()">Sair do Painel Admin</button>
                 </div>
-
-                <button class="btn btn-outline" onclick="logoutAdmin()" style="color: var(--danger);">SAIR DO PAINEL</button>
-                <button class="btn" style="background:none; color:gray; font-size:0.5rem" onclick="db_reset()">Resetar Cache Local</button>
             </div>
         </section>
+
+        <!-- RODAPÉ DE CRÉDITOS -->
+        <div class="dev-card">
+            <i class="fab fa-whatsapp"></i>
+            <div style="flex:1">
+                <h4 style="font-size:0.8rem; color:#34d399">Suporte Técnico G-HP</h4>
+                <p style="font-size:0.6rem; color:var(--text-dim)">Responsável: Adriano Santos <span class="pix-tag">PIX: 61999487649</span></p>
+            </div>
+            <a href="https://wa.me/5561996209581" target="_blank" class="btn-accent" style="padding:8px 15px; border-radius:8px; text-decoration:none; font-size:0.7rem; font-weight:800;">ZAP</a>
+        </div>
+        
+        <p style="text-align:center; font-size:0.6rem; color:var(--text-dim); padding-bottom:30px; letter-spacing:1px;">
+            ENGENHARIA: CARLOS ALBERTO REIS © 2026<br>
+            PLATAFORMA G-HP MASTER V5.1.0
+        </p>
     </main>
 
+    <!-- NAVEGAÇÃO FOOTER -->
     <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('tab-hub', this)"><i class="fas fa-th-large"></i><span>Hub</span></button>
-        <button class="nav-item" onclick="switchTab('tab-admin', this)"><i class="fas fa-shield-halved"></i><span>Admin</span></button>
-        <button class="nav-item" onclick="window.open('https://wa.me/5561999487649')"><i class="fas fa-headset"></i><span>Suporte</span></button>
+        <button class="nav-item active" onclick="switchTab('tab-hub', this)">
+            <i class="fas fa-th-large"></i>
+            <span>Ecossistema</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('tab-admin', this)">
+            <i class="fas fa-shield-halved"></i>
+            <span>Comando</span>
+        </button>
+        <button class="nav-item" onclick="window.open('https://wa.me/5561999487649')">
+            <i class="fas fa-headset"></i>
+            <span>Suporte</span>
+        </button>
     </nav>
 
+    <!-- LÓGICA DE ENGENHARIA -->
     <script>
-        // --- CONFIGURAÇÃO ---
+        // 1. CONFIGURAÇÃO FIREBASE (DATABASE RTDB)
         const firebaseConfig = {
-            databaseURL: "https://ghp-ecosystem-default-rtdb.firebaseio.com/" 
+            databaseURL: "https://ghp-ecosystem-default-rtdb.firebaseio.com/"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let appState = { apps: [] };
-
-        // --- INICIALIZAÇÃO ---
-        window.onload = () => {
-            syncFirebase();
-            initApexCounter();
+        // 2. ESTADO GLOBAL DA APLICAÇÃO
+        let appState = {
+            apps: [],
+            info: { marquee: "", news: [] }
         };
 
+        // 3. INICIALIZAÇÃO
+        window.onload = () => {
+            syncFirebase();
+            initApexCounter({
+                storageKey: 'ghp_master_v5_hits',
+                baseValue: 15200,
+                growthRate: 35,
+                startDate: '2026-01-01'
+            });
+        };
+
+        // 4. MOTOR DE SINCRONIZAÇÃO REALTIME
         function syncFirebase() {
-            // Escuta Apps
+            // Sincronizar Apps
             database.ref('ghp_v5/apps').on('value', snapshot => {
                 const data = snapshot.val();
                 appState.apps = data ? Object.keys(data).map(k => ({...data[k], key: k})) : [];
                 renderApps();
                 renderManageList();
-            });
+            }, error => console.error("Erro de Permissão (Apps):", error));
 
-            // Escuta Mural
-            database.ref('ghp_v5/news').limitToLast(1).on('value', snapshot => {
+            // Sincronizar Informações (Marquee e Mural)
+            database.ref('ghp_v5/info').on('value', snapshot => {
                 const data = snapshot.val();
                 if(data) {
-                    const latest = Object.values(data)[0];
-                    document.getElementById('newsFeed').innerHTML = `
-                        <div style="background:var(--accent); color:#000; padding:10px; border-radius:10px; margin-bottom:15px; font-size:0.8rem; font-weight:bold;">
-                            <i class="fas fa-bullhorn"></i> ${latest.text}
-                        </div>
-                    `;
+                    appState.info = data;
+                    document.getElementById('marqueeText').innerText = data.marquee || "🚀 G-HP MASTER: SISTEMA ONLINE";
+                    
+                    if(data.news) {
+                        const newsArray = Object.values(data.news).reverse();
+                        document.getElementById('newsFeed').innerHTML = newsArray.map(n => `
+                            <div class="news-card">
+                                <h3><i class="fas fa-bullhorn"></i> ${n.title}</h3>
+                                <p>${n.text}</p>
+                            </div>
+                        `).join('');
+                    }
                 }
-            });
+            }, error => console.error("Erro de Permissão (Info):", error));
         }
 
-        // --- RENDERIZADORES ---
+        // 5. RENDERIZADORES DE INTERFACE
         function renderApps() {
-            const container = document.getElementById('appGrid');
-            if(appState.apps.length === 0) { container.innerHTML = "<p>Nenhum app conectado.</p>"; return; }
-            container.innerHTML = appState.apps.map(app => `
+            const grid = document.getElementById('appGrid');
+            if(appState.apps.length === 0) {
+                grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; font-size:0.7rem; color:var(--text-dim);">Aguardando conexão com repositórios externos...</p>`;
+                return;
+            }
+            grid.innerHTML = appState.apps.map(app => `
                 <a href="${app.url}" target="_blank" class="app-card ${app.cat}">
-                    <i class="fas fa-rocket"></i>
+                    <i class="fas ${app.icon || 'fa-rocket'}"></i>
                     <h4>${app.name}</h4>
+                    <span>${app.cat.replace('c-', '')}</span>
                 </a>
             `).join('');
         }
 
         function renderManageList() {
-            const container = document.getElementById('manageList');
-            container.innerHTML = appState.apps.map(app => `
+            const list = document.getElementById('manageList');
+            list.innerHTML = appState.apps.map(app => `
                 <div class="manage-item">
-                    <span>${app.name}</span>
-                    <button class="btn-danger" onclick="db_deleteApp('${app.key}')">EXCLUIR</button>
+                    <div class="manage-info">
+                        <h5>${app.name}</h5>
+                        <p>${app.url.substring(0, 30)}...</p>
+                    </div>
+                    <button class="btn-del" onclick="db_deleteApp('${app.key}')">EXCLUIR</button>
                 </div>
             `).join('');
         }
 
-        // --- ADMIN LOGIC ---
+        // 6. FUNÇÕES ADMINISTRATIVAS (CRUD)
         function authAdmin() {
-            if(document.getElementById('mPass').value === 'hp2026') {
+            const pass = document.getElementById('mPass').value;
+            if(pass === 'hp2026') {
                 document.getElementById('adminAuth').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
-            } else { alert("Senha incorreta!"); }
+            } else {
+                alert("ACESSO NEGADO: Chave de criptografia incorreta.");
+            }
         }
 
         function logoutAdmin() {
@@ -227,64 +540,95 @@
             document.getElementById('mPass').value = '';
         }
 
-        // --- DATABASE CRUD ---
         function db_addApp() {
             const name = document.getElementById('addName').value;
             const url = document.getElementById('addUrl').value;
             const cat = document.getElementById('addCat').value;
-            
-            if(!name || !url) return alert("Preencha tudo!");
+            const icon = document.getElementById('addIcon').value;
 
-            database.ref('ghp_v5/apps').push({ name, url, cat })
+            if(!name || !url) { alert("Preencha o nome e a URL!"); return; }
+
+            database.ref('ghp_v5/apps').push({ name, url, cat, icon })
                 .then(() => {
-                    alert("Sucesso!");
+                    alert("Aplicativo Conectado com Sucesso!");
                     document.getElementById('addName').value = '';
                     document.getElementById('addUrl').value = '';
                 })
-                .catch(err => {
-                    console.error(err);
-                    alert("ERRO DE PERMISSÃO: Verifique as regras do Firebase.");
-                });
+                .catch(e => alert("ERRO NO BANCO: " + e.message));
         }
 
         function db_deleteApp(key) {
-            if(confirm("Deseja remover este app?")) {
-                database.ref(`ghp_v5/apps/${key}`).remove();
+            if(confirm("Deseja realmente remover este aplicativo do ecossistema?")) {
+                database.ref(`ghp_v5/apps/${key}`).remove()
+                    .catch(e => alert("Erro ao deletar: " + e.message));
             }
         }
 
         function db_updateInfo() {
+            const marquee = document.getElementById('setMarquee').value;
             const text = document.getElementById('newsText').value;
-            if(!text) return;
-            database.ref('ghp_v5/news').push({ text, date: Date.now() })
-                .then(() => alert("Mural atualizado!"))
-                .catch(() => alert("Erro ao atualizar mural."));
+            const title = "COMUNICADO " + new Date().toLocaleDateString('pt-BR');
+
+            if(marquee) {
+                database.ref('ghp_v5/info').update({ marquee })
+                    .then(() => alert("Letreiro atualizado!"));
+            }
+
+            if(text) {
+                database.ref('ghp_v5/info/news').push({ title, text })
+                    .then(() => {
+                        alert("Notícia publicada!");
+                        document.getElementById('newsText').value = '';
+                    });
+            }
         }
 
-        // --- UI UTILS ---
-        function switchTab(id, btn) {
+        // 7. MOTOR APEX COUNTER (ENGENHARIA DE AUTORIDADE)
+        function initApexCounter(config) {
+            let local = parseInt(localStorage.getItem(config.storageKey)) || 0;
+            local++;
+            localStorage.setItem(config.storageKey, local);
+            
+            document.getElementById('lCount').textContent = local;
+
+            const updateApex = () => {
+                const startDate = new Date(config.startDate).getTime();
+                const now = Date.now();
+                const daysPassed = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+                const simulatedGlobal = config.baseValue + (daysPassed * config.growthRate) + local;
+                document.getElementById('gCount').textContent = simulatedGlobal.toLocaleString('pt-BR');
+            };
+
+            updateApex();
+            setInterval(updateApex, 60000); // Atualiza a cada minuto
+        }
+
+        // 8. UTILITÁRIOS DE UI
+        function switchTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            
+            document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
+            
+            // Scroll para o topo ao trocar aba
+            document.getElementById('mainScroll').scrollTop = 0;
         }
 
-        function db_reset() {
-            localStorage.clear();
-            location.reload();
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
         }
 
-        function initApexCounter() {
-            let local = parseInt(localStorage.getItem('ghp_v5_hits')) || 0;
-            local++;
-            localStorage.setItem('ghp_v5_hits', local);
-            document.getElementById('lCount').textContent = local;
-            // Simulação de rede global
-            const base = 15200;
-            const daily = 35;
-            const start = new Date('2025-01-01').getTime();
-            const diff = Math.floor((Date.now() - start) / 86400000);
-            document.getElementById('gCount').textContent = (base + (diff * daily) + local).toLocaleString();
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "ghp_master_backup.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
         }
     </script>
 </body>
