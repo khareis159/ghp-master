@@ -118,7 +118,7 @@
             width: 100%; 
             max-width: 800px; 
             margin: 0 auto; 
-            padding-bottom: 40px;
+            padding-bottom: 120px !important; /* Aumentado para o teclado não cobrir o campo */
         }
         .tab-content.active { 
             display: block; 
@@ -232,6 +232,9 @@
             width: 100%; padding: 14px; background: var(--bg); 
             border: 1px solid var(--border); border-radius: 12px; 
             color: #fff; outline: none; font-size: 0.9rem; font-family: 'Inter', sans-serif;
+            position: relative; /* Adicione esta linha */
+            z-index: 10;        /* Adicione esta linha */
+            cursor: text;       /* Adicione esta linha */
         }
 
         .btn { 
@@ -272,7 +275,7 @@
             justify-content: space-around;
             align-items: center;
             padding-bottom: env(safe-area-inset-bottom);
-            z-index: 1000;
+            z-index: 999;
         }
         .nav-item { 
             background: none; border: none; color: var(--text-dim); 
@@ -568,22 +571,37 @@
             }
         }
 
-        function db_updateInfo() {
-            const marquee = document.getElementById('setMarquee').value;
-            const text = document.getElementById('newsText').value;
+       function db_updateInfo() {
+            const marqueeInput = document.getElementById('setMarquee');
+            const newsInput = document.getElementById('newsText');
+            
+            const marqueeValue = marqueeInput.value;
+            const newsValue = newsInput.value;
             const title = "COMUNICADO " + new Date().toLocaleDateString('pt-BR');
 
-            if(marquee) {
-                database.ref('ghp_v5/info').update({ marquee })
-                    .then(() => alert("Letreiro atualizado!"));
+            // 1. Atualiza o Letreiro (Marquee) se houver texto
+            if(marqueeValue.trim() !== "") {
+                database.ref('ghp_v5/info').update({ marquee: marqueeValue })
+                    .then(() => {
+                        alert("Letreiro atualizado com sucesso!");
+                        marqueeInput.value = ""; // Limpa o campo do letreiro
+                    })
+                    .catch(e => alert("Erro no servidor: " + e.message));
             }
 
-            if(text) {
-                database.ref('ghp_v5/info/news').push({ title, text })
+            // 2. Publica Nova Notícia se houver texto
+            if(newsValue.trim() !== "") {
+                database.ref('ghp_v5/info/news').push({ title, text: newsValue })
                     .then(() => {
-                        alert("Notícia publicada!");
-                        document.getElementById('newsText').value = '';
-                    });
+                        alert("Notícia publicada no mural!");
+                        newsInput.value = ""; // Limpa o campo da notícia
+                    })
+                    .catch(e => alert("Erro ao publicar: " + e.message));
+            }
+            
+            // 3. Aviso caso clique sem digitar nada
+            if(marqueeValue.trim() === "" && newsValue.trim() === "") {
+                alert("Por favor, digite uma mensagem no Letreiro ou na Notícia.");
             }
         }
 
