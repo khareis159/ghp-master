@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>G-HP Master Ecosystem | Centro de Comando 2026</title>
+    <title>G-HP Master Ecosystem V5.2 | Full Interactive Edition</title>
     
-    <!-- INFRAESTRUTURA DE ICONES E FONTES -->
+    <!-- BIBLIOTECAS DE SUPORTE EXTERNO (ICONOGRAFIA E TIPOGRAFIA) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     
-    <!-- FIREBASE CORE SDK (COMPAT MODE) -->
+    <!-- SDK FIREBASE COMPAT (ESTABILIDADE GARANTIDA) -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
     <style>
-        /* --- ARQUITETURA DE CORES G-HP (CSS VARIABLES) --- */
+        /* --- DESIGN SYSTEM G-HP MASTER --- */
         :root {
             --primary: #0ea5e9;
             --accent: #f59e0b;
@@ -25,10 +25,10 @@
             --border: rgba(255, 255, 255, 0.1);
             --text: #f8fafc;
             --text-dim: #94a3b8;
-            --header-h: 120px;
+            --header-h: 125px;
             --footer-h: 75px;
             
-            /* SINALIZAÇÃO POR CATEGORIA */
+            /* VARIAÇÕES DE SINALIZAÇÃO POR CATEGORIA */
             --cat-print: #10b981;
             --cat-docs: #3b82f6;
             --cat-design: #8b5cf6;
@@ -36,6 +36,7 @@
             --cat-util: #ef4444;
         }
 
+        /* TEMA CLARO (INVERSÃO DINÂMICA) */
         [data-theme="light"] {
             --bg: #f1f5f9;
             --card-bg: rgba(255, 255, 255, 0.98);
@@ -44,328 +45,262 @@
             --text-dim: #64748b;
         }
 
-        /* --- RESET E COMPORTAMENTO IRONCLAD (ESTABILIDADE J5) --- */
+        /* --- CORE ARCHITECTURE (IRONCLAD) --- */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         html, body { 
-            width: 100%; 
-            height: 100%; 
-            overflow: hidden; 
-            position: fixed; 
-            background-color: var(--bg); 
-            font-family: 'Inter', sans-serif;
-            color: var(--text);
-            transition: background 0.3s ease;
+            width: 100%; height: 100%; overflow: hidden; position: fixed; 
+            background-color: var(--bg); font-family: 'Inter', sans-serif;
+            color: var(--text); transition: background 0.4s ease;
         }
 
-        /* --- CAMADA 1: HEADER (ALTURA FIXA) --- */
+        /* --- HEADER E APEX COUNTER --- */
         header {
-            height: var(--header-h);
-            width: 100%;
-            position: absolute;
-            top: 0;
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            height: var(--header-h); width: 100%; position: absolute; top: 0;
+            background: var(--card-bg); border-bottom: 1px solid var(--border);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 1000; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
         }
 
-        .brand { display: flex; align-items: center; gap: 8px; }
+        .brand { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
         .brand h1 { 
-            font-size: 1.2rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: -1px;
-            color: var(--text);
+            font-size: 1.15rem; font-weight: 800; text-transform: uppercase; 
+            letter-spacing: -1px; color: var(--text);
         }
         .brand b { color: var(--accent); }
 
-        /* MOTOR APEX COUNTER (VISUAL) */
         .apex-counter-hub {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.6rem;
-            text-align: center;
-            color: var(--accent);
-            background: rgba(0,0,0,0.4);
-            padding: 6px 16px;
-            border-radius: 50px;
-            border: 1px solid var(--border);
-            margin-top: 8px;
-            line-height: 1.2;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-align: center;
+            color: var(--accent); background: rgba(0,0,0,0.5); padding: 7px 18px;
+            border-radius: 50px; border: 1px solid var(--border); margin-top: 10px;
+            line-height: 1.4; font-weight: 700; letter-spacing: 0.5px;
         }
         .apex-counter-hub b { color: #fff; }
 
-        /* --- CAMADA 2: CONTEÚDO PRINCIPAL (SCROLL INTERNO) --- */
+        /* --- MAIN SCROLL AREA --- */
         main {
-            position: absolute;
-            top: var(--header-h);
-            bottom: var(--footer-h);
-            width: 100%;
-            overflow-y: auto;
-            padding: 15px;
-            -webkit-overflow-scrolling: touch;
-            display: flex;
-            flex-direction: column;
+            position: absolute; top: var(--header-h); bottom: var(--footer-h);
+            width: 100%; overflow-y: auto; padding: 15px; 
+            -webkit-overflow-scrolling: touch; display: flex; flex-direction: column;
         }
 
         .tab-content { 
-            display: none; 
-            width: 100%; 
-            max-width: 800px; 
-            margin: 0 auto; 
-            padding-bottom: 120px !important; /* Aumentado para o teclado não cobrir o campo */
+            display: none; width: 100%; max-width: 850px; 
+            margin: 0 auto; padding-bottom: 150px !important; 
         }
-        .tab-content.active { 
-            display: block; 
-            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
+        .tab-content.active { display: block; animation: slideUp 0.4s ease-out; }
 
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(20px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
 
-        /* --- COMPONENTES: MURAL E LETREIRO --- */
+        /* --- MURAL E MARQUEE DINÂMICO --- */
         .news-marquee { 
-            background: var(--primary); 
-            color: #fff; 
-            padding: 10px; 
-            font-size: 0.75rem; 
-            font-weight: 800; 
-            overflow: hidden; 
-            white-space: nowrap; 
-            margin-bottom: 20px; 
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            background: var(--primary); color: #fff; padding: 12px; 
+            font-size: 0.75rem; font-weight: 800; overflow: hidden; 
+            white-space: nowrap; margin-bottom: 20px; border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4); border: 1px solid rgba(255,255,255,0.2);
         }
         .news-marquee div { 
-            display: inline-block; 
-            padding-left: 100%; 
-            animation: marquee 25s linear infinite; 
+            display: inline-block; padding-left: 100%; 
+            animation: marquee-anim 30s linear infinite; 
         }
-        @keyframes marquee { 
+        @keyframes marquee-anim { 
             0% { transform: translateX(0); } 
-            100% { transform: translateX(-150%); } 
+            100% { transform: translateX(-180%); } 
         }
 
         .news-card { 
-            background: var(--card-bg); 
-            padding: 18px; 
-            border-radius: 15px; 
-            border-left: 5px solid var(--accent); 
-            margin-bottom: 15px; 
-            border-top: 1px solid var(--border);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            background: var(--card-bg); padding: 20px; border-radius: 18px; 
+            border-left: 6px solid var(--accent); margin-bottom: 25px; 
+            border-top: 1px solid var(--border); box-shadow: 0 6px 25px rgba(0,0,0,0.3);
         }
-        .news-card h3 { font-size: 0.9rem; color: var(--accent); margin-bottom: 6px; text-transform: uppercase; }
-        .news-card p { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
+        .news-card h3 { font-size: 0.95rem; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; }
+        .news-card p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 15px; }
 
-        /* --- COMPONENTES: GRID DE APPS --- */
+        /* --- ENGINE DE COMENTÁRIOS V5.2 --- */
+        .comment-box { border-top: 1px solid var(--border); padding-top: 15px; margin-top: 10px; }
+        .comment-list { max-height: 200px; overflow-y: auto; margin-bottom: 15px; }
+        .comment-item { 
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border); 
+            padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 0.75rem; 
+        }
+        .comment-item b { color: var(--accent); display: block; margin-bottom: 3px; font-size: 0.7rem; }
+        .comment-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .comment-form input { 
+            padding: 10px; background: var(--bg); border: 1px solid var(--border); 
+            border-radius: 8px; color: #fff; font-size: 0.8rem; 
+        }
+        .comment-form input.msg-field { grid-column: span 2; }
+        .btn-send-comment { 
+            grid-column: span 2; background: var(--primary); color: #fff; 
+            border: none; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; 
+        }
+
+        /* --- GRID DE APPS (CROSS-REPO) --- */
         .app-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
-            gap: 15px; 
-            margin-top: 10px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 18px; margin-top: 10px;
         }
         .app-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 25px 15px;
-            text-align: center;
-            text-decoration: none;
-            color: inherit;
-            position: relative;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow: hidden;
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 22px;
+            padding: 30px 15px; text-align: center; text-decoration: none; color: inherit;
+            position: relative; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; align-items: center; overflow: hidden;
         }
         .app-card::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; width: 5px; height: 100%;
+            content: ''; position: absolute; left: 0; top: 0; width: 6px; height: 100%;
             background: var(--primary);
         }
-        .app-card i { font-size: 2.2rem; color: var(--accent); margin-bottom: 12px; }
-        .app-card h4 { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+        .app-card i { font-size: 2.4rem; color: var(--accent); margin-bottom: 15px; }
+        .app-card h4 { font-size: 0.9rem; font-weight: 700; color: var(--text); }
         .app-card span { 
-            font-size: 0.65rem; 
-            color: var(--text-dim); 
-            text-transform: uppercase; 
-            margin-top: 6px;
-            background: rgba(255,255,255,0.05);
-            padding: 2px 8px;
-            border-radius: 4px;
+            font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; 
+            margin-top: 8px; background: rgba(255,255,255,0.05); padding: 3px 10px; border-radius: 6px; 
         }
 
-        /* CLASSES DE CATEGORIA DINÂMICA */
         .c-print::before { background: var(--cat-print); }
         .c-docs::before { background: var(--cat-docs); }
         .c-design::before { background: var(--cat-design); }
         .c-retail::before { background: var(--cat-retail); }
         .c-util::before { background: var(--cat-util); }
 
-        /* --- CAMADA 3: PAINEL ADMINISTRATIVO (CMS) --- */
+        /* --- PAINEL ADMINISTRATIVO PRO --- */
         .admin-box { 
-            background: var(--card-bg); 
-            padding: 20px; 
-            border-radius: 20px; 
-            border: 1px solid var(--border); 
-            margin-bottom: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: var(--card-bg); padding: 22px; border-radius: 22px; 
+            border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 12px 35px rgba(0,0,0,0.4);
         }
-        .admin-box h3 { font-size: 1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .admin-box h3 { font-size: 1.05rem; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; color: #fff; }
         
-        .form-group { margin-bottom: 15px; }
+        .form-group { margin-bottom: 18px; }
         .form-group label { 
-            display: block; font-size: 0.65rem; font-weight: 800; 
-            color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; 
+            display: block; font-size: 0.68rem; font-weight: 800; 
+            color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; 
         }
         .form-group input, .form-group select, .form-group textarea { 
-            width: 100%; padding: 14px; background: var(--bg); 
-            border: 1px solid var(--border); border-radius: 12px; 
-            color: #fff; outline: none; font-size: 0.9rem; font-family: 'Inter', sans-serif;
-            position: relative; /* Adicione esta linha */
-            z-index: 10;        /* Adicione esta linha */
-            cursor: text;       /* Adicione esta linha */
+            width: 100%; padding: 15px; background: var(--bg); border: 1px solid var(--border); 
+            border-radius: 14px; color: #fff; outline: none; font-size: 0.95rem; 
+            font-family: 'Inter', sans-serif; position: relative; z-index: 10; cursor: text;
         }
 
         .btn { 
-            width: 100%; padding: 15px; border-radius: 12px; border: none; 
-            font-weight: 800; cursor: pointer; display: flex; 
-            align-items: center; justify-content: center; gap: 10px; 
-            transition: 0.2s; font-family: 'Inter', sans-serif;
-            text-transform: uppercase; font-size: 0.8rem;
+            width: 100%; padding: 16px; border-radius: 14px; border: none; 
+            font-weight: 800; cursor: pointer; display: flex; align-items: center; 
+            justify-content: center; gap: 12px; transition: 0.3s; 
+            text-transform: uppercase; font-size: 0.85rem;
         }
         .btn-accent { background: var(--accent); color: #000; }
-        .btn-accent:active { transform: scale(0.98); opacity: 0.9; }
-        .btn-danger { background: var(--danger); color: #fff; margin-top: 10px; }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dim); margin-top: 10px; }
+        .btn-danger { background: var(--danger); color: #fff; margin-top: 12px; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dim); margin-top: 12px; }
 
-        /* LISTA DE GERENCIAMENTO (CRUD) */
-        .manage-list { margin-top: 15px; border-top: 1px solid var(--border); }
+        /* GESTÃO GRANULAR (LISTAS) */
+        .manage-list { margin-top: 20px; border-top: 1px solid var(--border); }
         .manage-item { 
             display: flex; align-items: center; justify-content: space-between; 
-            padding: 12px 0; border-bottom: 1px solid var(--border);
+            padding: 15px 0; border-bottom: 1px solid var(--border);
         }
-        .manage-info h5 { font-size: 0.85rem; color: var(--text); }
-        .manage-info p { font-size: 0.65rem; color: var(--text-dim); }
+        .manage-info h5 { font-size: 0.88rem; color: var(--text); margin-bottom: 3px; }
+        .manage-info p { font-size: 0.68rem; color: var(--text-dim); }
         .btn-del { 
-            background: rgba(239, 68, 68, 0.1); color: var(--danger); 
-            border: 1px solid var(--danger); padding: 5px 10px; 
-            border-radius: 6px; font-size: 0.6rem; font-weight: 800;
+            background: rgba(239, 68, 68, 0.15); color: var(--danger); 
+            border: 1.5px solid var(--danger); padding: 7px 12px; 
+            border-radius: 8px; font-size: 0.65rem; font-weight: 800;
         }
 
-        /* --- CAMADA 4: FOOTER (ALTURA FIXA) --- */
+        /* --- FOOTER NAV IRONCLAD --- */
         nav.bottom-nav {
-            height: var(--footer-h);
-            width: 100%;
-            position: absolute;
-            bottom: 0;
-            background: var(--card-bg);
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding-bottom: env(safe-area-inset-bottom);
-            z-index: 999;
+            height: var(--footer-h); width: 100%; position: absolute; bottom: 0;
+            background: var(--card-bg); border-top: 1px solid var(--border);
+            display: flex; justify-content: space-around; align-items: center;
+            padding-bottom: env(safe-area-inset-bottom); z-index: 999;
         }
         .nav-item { 
             background: none; border: none; color: var(--text-dim); 
             display: flex; flex-direction: column; align-items: center; 
-            gap: 5px; font-size: 0.65rem; font-weight: 700; cursor: pointer; 
-            transition: 0.2s;
+            gap: 6px; font-size: 0.68rem; font-weight: 700; cursor: pointer; transition: 0.3s;
         }
         .nav-item.active { color: var(--accent); }
-        .nav-item i { font-size: 1.4rem; }
+        .nav-item i { font-size: 1.5rem; }
 
-        /* DEV CARD E CRÉDITOS */
+        /* CRÉDITOS E SUPORTE */
         .dev-card { 
-            background: #0f1d13; border: 1px solid #064e3b; 
-            border-radius: 18px; padding: 15px; margin: 20px 0; 
-            display: flex; align-items: center; gap: 15px; 
+            background: #0f1d13; border: 1.5px solid #064e3b; border-radius: 20px; 
+            padding: 18px; margin: 25px 0; display: flex; align-items: center; gap: 18px; 
         }
-        .dev-card i { color: #25d366; font-size: 1.5rem; }
-        .pix-tag { font-size: 0.55rem; background: #064e3b; color: #34d399; padding: 2px 6px; border-radius: 4px; }
+        .dev-card i { color: #25d366; font-size: 1.8rem; }
+        .pix-tag { font-size: 0.6rem; background: #064e3b; color: #fff; padding: 4px 10px; border-radius: 6px; font-weight: 700; }
 
-        /* RESPONSIVIDADE ADICIONAL */
-        @media (max-width: 360px) {
-            .app-grid { grid-template-columns: 1fr 1fr; }
-            .brand h1 { font-size: 0.9rem; }
+        .footer-credits {
+            text-align: center; font-size: 0.68rem; color: var(--accent) !important; 
+            font-weight: 800; padding-bottom: 40px; letter-spacing: 1.5px; text-transform: uppercase;
+        }
+
+        /* AJUSTE PARA DISPOSITIVOS MUITO PEQUENOS */
+        @media (max-width: 380px) {
+            .app-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .brand h1 { font-size: 1rem; }
+            .apex-counter-hub { font-size: 0.5rem; }
         }
     </style>
 </head>
 <body data-theme="dark">
 
-    <!-- HEADER IRONCLAD -->
+    <!-- CAMADA 1: HEADER FIXO -->
     <header>
         <div class="brand">
-            <i class="fas fa-shield-virus" style="color:var(--accent)"></i>
+            <i class="fas fa-shield-halved" style="color:var(--accent)"></i>
             <h1>G-HP Master <b>Ecossistema</b></h1>
         </div>
         <div class="apex-counter-hub">
-            🌐 SISTEMAS ATIVOS: <b id="gCount">0</b><br>
-            👤 MEUS ACESSOS: <b id="lCount">0</b>
+            🌐 SISTEMAS EM REDE: <b id="gCount">0</b><br>
+            👤 SEUS ACESSOS ÚNICOS: <b id="lCount">0</b>
         </div>
-        <button onclick="toggleTheme()" style="position:absolute; right:20px; top:35px; background:none; border:none; color:var(--accent); font-size:1.3rem;">
+        <button onclick="toggleTheme()" style="position:absolute; right:20px; top:40px; background:none; border:none; color:var(--accent); font-size:1.4rem;">
             <i class="fas fa-circle-half-stroke"></i>
         </button>
     </header>
 
-    <!-- CONTEÚDO DINÂMICO -->
+    <!-- CAMADA 2: CONTEÚDO PRINCIPAL -->
     <main id="mainScroll">
         
-        <!-- ABA 1: HUB DO ECOSSISTEMA -->
+        <!-- ABA HUB: VITRINE E INTERATIVIDADE -->
         <section id="tab-hub" class="tab-content active">
             <div class="news-marquee">
-                <div id="marqueeText">🚀 INICIALIZANDO PROTOCOLOS G-HP MASTER... AGUARDE A SINCRONIZAÇÃO COMPLETA COM TODOS OS APPs DO CENTRO DE COMANDO G-HP...</div>
+                <div id="marqueeText">🚀 G-HP MASTER V5.2 INTERATIVA: SINCRONIZANDO PROTOCOLOS DE SEGURANÇA E MURAL DE FEEDBACK...</div>
             </div>
 
             <div id="newsFeed">
-                <!-- Notícias do Firebase entram aqui -->
+                <!-- Injeção via Firebase -->
             </div>
 
             <div class="app-grid" id="appGrid">
-                <!-- Apps do Firebase entram aqui -->
+                <!-- Injeção via Firebase -->
             </div>
         </section>
 
-        <!-- ABA 2: PAINEL ADMIN -->
+        <!-- ABA COMANDO: PAINEL ADMINISTRATIVO -->
         <section id="tab-admin" class="tab-content">
             
-            <!-- BLOCO DE LOGIN -->
             <div id="adminAuth">
                 <div class="admin-box">
-                    <h3><i class="fas fa-lock"></i> Autenticação SGBD</h3>
-                    <p style="font-size:0.7rem; color:var(--text-dim); margin-bottom:15px;">Insira a senha de criptografia para liberar o banco de dados.</p>
+                    <h3><i class="fas fa-key"></i> Autenticação Terminal</h3>
                     <div class="form-group">
-                        <input type="password" id="mPass" placeholder="Senha do Administrador">
+                        <input type="password" id="mPass" placeholder="Chave Mestra G-HP">
                     </div>
-                    <button class="btn btn-accent" onclick="authAdmin()">Acessar Terminal</button>
+                    <button class="btn btn-accent" onclick="authAdmin()">Liberar SGBD</button>
                 </div>
             </div>
 
-            <!-- BLOCO DE COMANDO (LOGADO) -->
             <div id="adminPanel" style="display:none;">
+                
+                <!-- CONEXÃO DE APPS -->
                 <div class="admin-box">
-                    <h3><i class="fas fa-plus-circle"></i> Conectar Aplicativo</h3>
+                    <h3><i class="fas fa-plug"></i> Conectar Aplicativo</h3>
+                    <div class="form-group"><label>Nome do App</label><input type="text" id="addName"></div>
+                    <div class="form-group"><label>URL GitHub Pages</label><input type="url" id="addUrl"></div>
                     <div class="form-group">
-                        <label>Nome do Serviço</label>
-                        <input type="text" id="addName" placeholder="Ex: Portal do Cliente">
-                    </div>
-                    <div class="form-group">
-                        <label>URL GitHub Pages (Completa)</label>
-                        <input type="url" id="addUrl" placeholder="https://gh-photos.github.io/app/">
-                    </div>
-                    <div class="form-group">
-                        <label>Sinalização (Cor)</label>
+                        <label>Categoria de Serviço</label>
                         <select id="addCat">
                             <option value="c-docs">🔵 Documentos</option>
                             <option value="c-print">🟢 Impressão</option>
@@ -374,138 +309,137 @@
                             <option value="c-util">🔴 Úteis</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Ícone FontAwesome</label>
-                        <input type="text" id="addIcon" value="fa-rocket">
-                    </div>
                     <button class="btn btn-accent" onclick="db_addApp()">Publicar no Ecossistema</button>
                 </div>
 
+                <!-- CONTROLE DE MURAL & MARQUEE -->
                 <div class="admin-box">
-                    <h3><i class="fas fa-edit"></i> Mural & Marquee</h3>
+                    <h3><i class="fas fa-bullhorn"></i> Controle de Comunicação</h3>
                     <div class="form-group">
-                        <label>Texto do Letreiro (Marquee)</label>
-                        <input type="text" id="setMarquee" placeholder="Texto que corre no topo">
+                        <label>Mensagem do Letreiro</label>
+                        <input type="text" id="setMarquee" placeholder="Texto rotativo do topo">
                     </div>
+                    <button class="btn btn-accent" onclick="db_updateMarquee()" style="margin-bottom:20px;">Atualizar Letreiro</button>
+                    <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
                     <div class="form-group">
-                        <label>Conteúdo da Notícia</label>
-                        <textarea id="newsText" rows="3" placeholder="Escreva o aviso importante aqui..."></textarea>
+                        <label>Nova Notícia (Mural)</label>
+                        <textarea id="newsText" rows="3" placeholder="Escreva o comunicado aqui..."></textarea>
                     </div>
-                    <button class="btn btn-accent" onclick="db_updateInfo()">Atualizar Feed</button>
+                    <button class="btn btn-accent" onclick="db_addNews()">Postar no Mural</button>
                 </div>
 
+                <!-- GESTÃO DE MURAL (NOVO V5.2) -->
                 <div class="admin-box">
-                    <h3><i class="fas fa-list-check"></i> Gerenciar Conexões</h3>
-                    <div id="manageList" class="manage-list">
-                        <!-- Lista de apps para deletar -->
+                    <h3><i class="fas fa-comment-slash"></i> Gerenciar Mural</h3>
+                    <div id="manageNewsList" class="manage-list">
+                        <!-- Lista de notícias para apagar -->
                     </div>
                 </div>
 
+                <!-- GESTÃO DE CONEXÕES -->
+                <div class="admin-box">
+                    <h3><i class="fas fa-network-wired"></i> Gerenciar Apps</h3>
+                    <div id="manageAppList" class="manage-list">
+                        <!-- Lista de apps para apagar -->
+                    </div>
+                </div>
+
+                <!-- MANUTENÇÃO E BACKUP -->
                 <div class="admin-box" style="border-color: var(--danger);">
-                    <h3><i class="fas fa-database"></i> Manutenção</h3>
-                    <button class="btn btn-outline" onclick="exportData()">Exportar Backup JSON</button>
-                    <button class="btn btn-danger" onclick="logoutAdmin()">Sair do Painel Admin</button>
+                    <h3><i class="fas fa-microchip"></i> Sistema</h3>
+                    <button class="btn btn-outline" onclick="exportData()">Gerar Backup JSON</button>
+                    <button class="btn btn-danger" onclick="logoutAdmin()">Encerrar Sessão</button>
                 </div>
+
             </div>
         </section>
 
-     <!-- RODAPÉ DE CRÉDITOS -->
-<div class="dev-card">
-    <i class="fab fa-whatsapp"></i>
-    <div style="flex:1">
-        <h4 style="font-size:0.8rem; color:#34d399">Suporte Técnico G-HP</h4>
-        <!-- Alterado de var(--text-dim) para #fff -->
-        <p style="font-size:0.6rem; color: #fff;">Responsável: Carlos Eduardo Reis 
-            <span class="pix-tag" style="color: #fff; background: #064e3b;">PIX: 61999487649</span>
-        </p>
-    </div>
-    <a href="https://wa.me/5561996209581" target="_blank" class="btn-accent" style="padding:8px 15px; border-radius:8px; text-decoration:none; font-size:0.7rem; font-weight:800;">ZAP</a>
-</div>
+        <!-- RODAPÉ DE SUPORTE -->
+        <div class="dev-card">
+            <i class="fab fa-whatsapp"></i>
+            <div style="flex:1">
+                <h4 style="font-size:0.85rem; color:#34d399">Suporte Técnico Direto</h4>
+                <p style="font-size:0.7rem; color: #fff;">Carlos Eduardo Reis <span class="pix-tag">PIX: 61999487649</span></p>
+            </div>
+            <a href="https://wa.me/5561996209581" target="_blank" class="btn-accent" style="padding:10px 18px; border-radius:10px; text-decoration:none; font-size:0.75rem; font-weight:800;">ZAP</a>
+        </div>
+        
+        <div class="footer-credits">
+            DESENVOLVEDOR: CARLOS ALBERTO REIS © 2026<br>
+            PLATAFORMA G-HP MASTER V5.2.0 FULL
+        </div>
+    </main>
 
-<!-- Créditos de Engenharia também em branco -->
-<!-- Procure este bloco no final do seu código e substitua por este abaixo -->
-<p style="text-align:center; font-size:0.65rem; color: #f59e0b !important; font-weight: 800; padding-bottom:30px; letter-spacing:1px; text-transform: uppercase;">
-    DESENVOLVEDOR: CARLOS ALBERTO REIS © 2026<br>
-    PLATAFORMA G-HP MASTER V5.1.0
-</p>
-
-    <!-- NAVEGAÇÃO FOOTER -->
+    <!-- CAMADA 3: FOOTER NAV FIXO -->
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="switchTab('tab-hub', this)">
-            <i class="fas fa-th-large"></i>
-            <span>Ecossistema</span>
+            <i class="fas fa-th-large"></i><span>Ecossistema</span>
         </button>
         <button class="nav-item" onclick="switchTab('tab-admin', this)">
-            <i class="fas fa-shield-halved"></i>
-            <span>Comando</span>
+            <i class="fas fa-terminal"></i><span>Comando</span>
         </button>
         <button class="nav-item" onclick="window.open('https://wa.me/5561999487649')">
-            <i class="fas fa-headset"></i>
-            <span>Suporte</span>
+            <i class="fas fa-headset"></i><span>Suporte</span>
         </button>
     </nav>
 
-    <!-- LÓGICA DE ENGENHARIA -->
+    <!-- --- ENGINE DE INTELIGÊNCIA (JS) --- -->
     <script>
-        // 1. CONFIGURAÇÃO FIREBASE (DATABASE RTDB)
+        // 1. INICIALIZAÇÃO FIREBASE RTDB
         const firebaseConfig = {
             databaseURL: "https://ghp-ecosystem-default-rtdb.firebaseio.com/"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 2. ESTADO GLOBAL DA APLICAÇÃO
+        // 2. ESTADO GLOBAL DE DADOS
         let appState = {
             apps: [],
-            info: { marquee: "", news: [] }
+            news: [],
+            marquee: ""
         };
 
-        // 3. INICIALIZAÇÃO
+        // 3. BOOTSTRAP DO SISTEMA
         window.onload = () => {
             syncFirebase();
             initApexCounter({
-                storageKey: 'ghp_master_v5_hits',
+                storageKey: 'ghp_master_v52_hits',
                 baseValue: 15200,
                 growthRate: 35,
                 startDate: '2026-01-01'
             });
         };
 
-        // 4. MOTOR DE SINCRONIZAÇÃO REALTIME
+        // 4. SINCRONIZAÇÃO EM TEMPO REAL (WATCHERS)
         function syncFirebase() {
-            // Sincronizar Apps
+            // Watcher: Aplicativos
             database.ref('ghp_v5/apps').on('value', snapshot => {
                 const data = snapshot.val();
                 appState.apps = data ? Object.keys(data).map(k => ({...data[k], key: k})) : [];
                 renderApps();
-                renderManageList();
-            }, error => console.error("Erro de Permissão (Apps):", error));
+                renderManageApps();
+            });
 
-            // Sincronizar Informações (Marquee e Mural)
-            database.ref('ghp_v5/info').on('value', snapshot => {
+            // Watcher: Marquee
+            database.ref('ghp_v5/info/marquee').on('value', snapshot => {
+                appState.marquee = snapshot.val() || "🚀 G-HP MASTER ONLINE";
+                document.getElementById('marqueeText').innerText = appState.marquee;
+            });
+
+            // Watcher: Mural de Notícias e Comentários
+            database.ref('ghp_v5/info/news').on('value', snapshot => {
                 const data = snapshot.val();
-                if(data) {
-                    appState.info = data;
-                    document.getElementById('marqueeText').innerText = data.marquee || "🚀 G-HP MASTER: SISTEMA ONLINE";
-                    
-                    if(data.news) {
-                        const newsArray = Object.values(data.news).reverse();
-                        document.getElementById('newsFeed').innerHTML = newsArray.map(n => `
-                            <div class="news-card">
-                                <h3><i class="fas fa-bullhorn"></i> ${n.title}</h3>
-                                <p>${n.text}</p>
-                            </div>
-                        `).join('');
-                    }
-                }
-            }, error => console.error("Erro de Permissão (Info):", error));
+                appState.news = data ? Object.keys(data).map(k => ({...data[k], key: k})) : [];
+                renderNews();
+                renderManageNews();
+            });
         }
 
-        // 5. RENDERIZADORES DE INTERFACE
+        // 5. RENDERIZADORES DINÂMICOS
         function renderApps() {
             const grid = document.getElementById('appGrid');
             if(appState.apps.length === 0) {
-                grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; font-size:0.7rem; color:var(--text-dim);">Aguardando conexão com repositórios externos...</p>`;
+                grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; font-size:0.75rem; color:var(--text-dim); padding:20px;">Aguardando conexão com repositórios externos...</p>`;
                 return;
             }
             grid.innerHTML = appState.apps.map(app => `
@@ -517,137 +451,184 @@
             `).join('');
         }
 
-        function renderManageList() {
-            const list = document.getElementById('manageList');
+        function renderNews() {
+            const feed = document.getElementById('newsFeed');
+            // Inverter para mostrar a mais recente primeiro
+            const sortedNews = [...appState.news].reverse();
+            
+            feed.innerHTML = sortedNews.map(n => {
+                // Renderizar comentários aninhados
+                const commentsHtml = n.comments ? Object.values(n.comments).map(c => `
+                    <div class="comment-item">
+                        <b>${c.user}</b>
+                        ${c.text}
+                    </div>
+                `).join('') : '<p style="font-size:0.65rem; color:var(--text-dim); margin-bottom:10px;">Sem comentários. Seja o primeiro!</p>';
+
+                return `
+                    <div class="news-card">
+                        <h3><i class="fas fa-bullhorn"></i> ${n.title}</h3>
+                        <p>${n.text}</p>
+                        
+                        <div class="comment-box">
+                            <div class="comment-list">${commentsHtml}</div>
+                            <div class="comment-form">
+                                <input type="text" id="name_${n.key}" placeholder="Seu Nome">
+                                <input type="text" id="msg_${n.key}" class="msg-field" placeholder="Escreva um comentário...">
+                                <button class="btn-send-comment" onclick="db_addComment('${n.key}')">ENVIAR COMENTÁRIO</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderManageApps() {
+            const list = document.getElementById('manageAppList');
             list.innerHTML = appState.apps.map(app => `
                 <div class="manage-item">
                     <div class="manage-info">
                         <h5>${app.name}</h5>
-                        <p>${app.url.substring(0, 30)}...</p>
+                        <p>${app.url.substring(0, 35)}...</p>
                     </div>
                     <button class="btn-del" onclick="db_deleteApp('${app.key}')">EXCLUIR</button>
                 </div>
             `).join('');
         }
 
-        // 6. FUNÇÕES ADMINISTRATIVAS (CRUD)
+        function renderManageNews() {
+            const list = document.getElementById('manageNewsList');
+            list.innerHTML = appState.news.map(n => `
+                <div class="manage-item">
+                    <div class="manage-info">
+                        <h5>${n.title}</h5>
+                        <p>${n.text.substring(0, 35)}...</p>
+                    </div>
+                    <button class="btn-del" onclick="db_deleteNews('${n.key}')">APAGAR</button>
+                </div>
+            `).join('');
+        }
+
+        // 6. AÇÕES DE BANCO DE DADOS (CRUD)
+        function db_addApp() {
+            const name = document.getElementById('addName').value;
+            const url = document.getElementById('addUrl').value;
+            const cat = document.getElementById('addCat').value;
+            if(!name || !url) return alert("Preencha Nome e URL do App!");
+
+            database.ref('ghp_v5/apps').push({ name, url, cat, icon: 'fa-rocket' })
+                .then(() => {
+                    alert("App conectado com sucesso!");
+                    document.getElementById('addName').value = "";
+                    document.getElementById('addUrl').value = "";
+                });
+        }
+
+        function db_deleteApp(key) {
+            if(confirm("Deseja remover este App do ecossistema?")) {
+                database.ref(`ghp_v5/apps/${key}`).remove();
+            }
+        }
+
+        function db_updateMarquee() {
+            const val = document.getElementById('setMarquee').value;
+            if(!val) return alert("Digite o novo texto do letreiro!");
+            database.ref('ghp_v5/info').update({ marquee: val })
+                .then(() => {
+                    alert("Letreiro atualizado!");
+                    document.getElementById('setMarquee').value = "";
+                });
+        }
+
+        function db_addNews() {
+            const text = document.getElementById('newsText').value;
+            if(!text) return alert("O conteúdo da notícia está vazio!");
+            const title = "MURAL " + new Date().toLocaleDateString('pt-BR');
+            
+            database.ref('ghp_v5/info/news').push({ title, text, date: Date.now() })
+                .then(() => {
+                    alert("Notícia publicada com sucesso!");
+                    document.getElementById('newsText').value = "";
+                });
+        }
+
+        function db_deleteNews(key) {
+            if(confirm("Apagar esta notícia e todos os comentários dela permanentemente?")) {
+                database.ref(`ghp_v5/info/news/${key}`).remove();
+            }
+        }
+
+        function db_addComment(newsKey) {
+            const user = document.getElementById(`name_${newsKey}`).value;
+            const text = document.getElementById(`msg_${newsKey}`).value;
+            if(!user || !text) return alert("Preencha seu nome e a mensagem!");
+
+            database.ref(`ghp_v5/info/news/${newsKey}/comments`).push({ 
+                user: user, 
+                text: text, 
+                timestamp: Date.now() 
+            }).then(() => {
+                alert("Comentário publicado!");
+                document.getElementById(`name_${newsKey}`).value = "";
+                document.getElementById(`msg_${newsKey}`).value = "";
+            });
+        }
+
+        // 7. SEGURANÇA E AUTH
         function authAdmin() {
             const pass = document.getElementById('mPass').value;
             if(pass === 'hp2026') {
                 document.getElementById('adminAuth').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
             } else {
-                alert("ACESSO NEGADO: Chave de criptografia incorreta.");
+                alert("ACESSO NEGADO: Chave Mestra inválida.");
             }
         }
 
         function logoutAdmin() {
             document.getElementById('adminAuth').style.display = 'block';
             document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('mPass').value = '';
+            document.getElementById('mPass').value = "";
         }
 
-        function db_addApp() {
-            const name = document.getElementById('addName').value;
-            const url = document.getElementById('addUrl').value;
-            const cat = document.getElementById('addCat').value;
-            const icon = document.getElementById('addIcon').value;
-
-            if(!name || !url) { alert("Preencha o nome e a URL!"); return; }
-
-            database.ref('ghp_v5/apps').push({ name, url, cat, icon })
-                .then(() => {
-                    alert("Aplicativo Conectado com Sucesso!");
-                    document.getElementById('addName').value = '';
-                    document.getElementById('addUrl').value = '';
-                })
-                .catch(e => alert("ERRO NO BANCO: " + e.message));
-        }
-
-        function db_deleteApp(key) {
-            if(confirm("Deseja realmente remover este aplicativo do ecossistema?")) {
-                database.ref(`ghp_v5/apps/${key}`).remove()
-                    .catch(e => alert("Erro ao deletar: " + e.message));
-            }
-        }
-
-       function db_updateInfo() {
-            const marqueeInput = document.getElementById('setMarquee');
-            const newsInput = document.getElementById('newsText');
-            
-            const marqueeValue = marqueeInput.value;
-            const newsValue = newsInput.value;
-            const title = "COMUNICADO " + new Date().toLocaleDateString('pt-BR');
-
-            // 1. Atualiza o Letreiro (Marquee) se houver texto
-            if(marqueeValue.trim() !== "") {
-                database.ref('ghp_v5/info').update({ marquee: marqueeValue })
-                    .then(() => {
-                        alert("Letreiro atualizado com sucesso!");
-                        marqueeInput.value = ""; // Limpa o campo do letreiro
-                    })
-                    .catch(e => alert("Erro no servidor: " + e.message));
-            }
-
-            // 2. Publica Nova Notícia se houver texto
-            if(newsValue.trim() !== "") {
-                database.ref('ghp_v5/info/news').push({ title, text: newsValue })
-                    .then(() => {
-                        alert("Notícia publicada no mural!");
-                        newsInput.value = ""; // Limpa o campo da notícia
-                    })
-                    .catch(e => alert("Erro ao publicar: " + e.message));
-            }
-            
-            // 3. Aviso caso clique sem digitar nada
-            if(marqueeValue.trim() === "" && newsValue.trim() === "") {
-                alert("Por favor, digite uma mensagem no Letreiro ou na Notícia.");
-            }
-        }
-
-        // 7. MOTOR APEX COUNTER (ENGENHARIA DE AUTORIDADE)
+        // 8. MOTOR APEX COUNTER (AUTORIDADE SIMULADA)
         function initApexCounter(config) {
             let local = parseInt(localStorage.getItem(config.storageKey)) || 0;
             local++;
             localStorage.setItem(config.storageKey, local);
-            
             document.getElementById('lCount').textContent = local;
 
-            const updateApex = () => {
+            const runApex = () => {
                 const startDate = new Date(config.startDate).getTime();
                 const now = Date.now();
-                const daysPassed = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-                const simulatedGlobal = config.baseValue + (daysPassed * config.growthRate) + local;
-                document.getElementById('gCount').textContent = simulatedGlobal.toLocaleString('pt-BR');
+                const days = Math.floor((now - startDate) / 86400000);
+                const simulated = config.baseValue + (days * config.growthRate) + local;
+                document.getElementById('gCount').textContent = simulated.toLocaleString('pt-BR');
             };
-
-            updateApex();
-            setInterval(updateApex, 60000); // Atualiza a cada minuto
+            runApex();
+            setInterval(runApex, 60000);
         }
 
-        // 8. UTILITÁRIOS DE UI
+        // 9. UTILITÁRIOS DE INTERFACE
         function switchTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
-            
-            // Scroll para o topo ao trocar aba
             document.getElementById('mainScroll').scrollTop = 0;
         }
 
         function toggleTheme() {
-            const body = document.body;
-            const isDark = body.getAttribute('data-theme') === 'dark';
-            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            const b = document.body;
+            const current = b.getAttribute('data-theme');
+            b.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
         }
 
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState));
             const downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "ghp_master_backup.json");
+            downloadAnchorNode.setAttribute("download", "GHP_MASTER_FULL_BACKUP.json");
             document.body.appendChild(downloadAnchorNode);
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
