@@ -96,12 +96,27 @@
         }
 
         /* --- MURAL E MARQUEE DINÂMICO --- */
-        .news-marquee { 
-            background: var(--primary); color: #fff; padding: 12px; 
-            font-size: 0.75rem; font-weight: 800; overflow: hidden; 
-            white-space: nowrap; margin-bottom: 20px; border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4); border: 1px solid rgba(255,255,255,0.2);
+
+.news-marquee { 
+            background: var(--primary); 
+            color: #fff; 
+            padding: 12px; 
+            /* AJUSTES DE LEGIBILIDADE ABAIXO */
+            font-family: 'JetBrains Mono', monospace; /* Fonte técnica e limpa */
+            font-size: 0.72rem; 
+            font-weight: 500;        /* Letra mais fina (era 800) */
+            letter-spacing: 1.8px;   /* Espaçamento entre as letras */
+            text-transform: uppercase;
+            /* FIM DOS AJUSTES */
+            overflow: hidden; 
+            white-space: nowrap; 
+            margin-bottom: 20px; 
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4); 
+            border: 1px solid rgba(255,255,255,0.2);
         }
+
+        
         .news-marquee div { 
             display: inline-block; padding-left: 100%; 
             animation: marquee-anim 60s linear infinite; 
